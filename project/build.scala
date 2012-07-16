@@ -7,14 +7,14 @@ import Keys._
 object Playpen extends Build {
   val Organization = "com.mslinn"
 
-  fetchFromUrl = new java.net.URL("https://raw.github.com/Bookish/config/master/scalaBuild/Build.conf")
-  //fetchFromUrl = SbtDependencies.jarUrl
-  println("Playpen: fetchFromUrl=" + fetchFromUrl.toString) // this works
+  configUrl := "https://raw.github.com/Bookish/config/master/scalaBuild/Build.conf"
+  //configUrl = SbtDependencies.jarUrl
+  println("Playpen: configUrl=" + configUrl.toString) // this works
 
   // Retrieve the Lookup object from versionsTask - does not work!
-  print("Playpen: versionsTask value=");      versionsTask    map { (lookup: Lookup) => println(lookup) }
-  print("\nPlaypen: credentialsTask value="); credentialsTask map { (lookup: Lookup) => println(lookup) }
-  print("\nPlaypen: serversTask value=");     serversTask     map { (lookup: Lookup) => println(lookup) }
+  print("Playpen: versionsTask value=");      configVersionsLookup    map { (lookup: Lookup) => println(lookup) }
+  print("\nPlaypen: credentialsTask value="); configCredentialsLookup map { (lookup: Lookup) => println(lookup) }
+  print("\nPlaypen: serversTask value=");     configServersLookup     map { (lookup: Lookup) => println(lookup) }
   println
 
   // Want to set vals called creds, servers and V to the appropriate lookup instance, but this does not compile
