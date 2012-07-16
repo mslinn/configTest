@@ -8,29 +8,24 @@ object Playpen extends Build {
   val Organization = "com.mslinn"
 
   configUrl := "https://raw.github.com/Bookish/config/master/scalaBuild/Build.conf"
-  //configUrl = SbtDependencies.jarUrl
-  println("Playpen: configUrl=" + configUrl.toString) // this works
+  //configUrl := SbtDependencies.jarUrl
+  println("Playpen: configUrl=" + configUrl) // how to display this?
 
-  // Retrieve the Lookup object from versionsTask - does not work!
+  // Retrieve the Lookup object from versionsTask - does not work! What is the right way of doing this?
   print("Playpen: versionsTask value=");      configVersionsLookup    map { (lookup: Lookup) => println(lookup) }
   print("\nPlaypen: credentialsTask value="); configCredentialsLookup map { (lookup: Lookup) => println(lookup) }
   print("\nPlaypen: serversTask value=");     configServersLookup     map { (lookup: Lookup) => println(lookup) }
   println
 
-  // Want to set vals called creds, servers and V to the appropriate lookup instance, but this does not compile
-//  val creds   = credentialsTask.flatMap { (lookup: Lookup) => lookup }
-//  val servers = serversTask.flatMap     { (lookup: Lookup) => lookup }
-//  val V       = versionsTask.flatMap    { (lookup: Lookup) => lookup }
-//
-//  println("creds=" + creds.toString)
-//  println("servers=" + servers.toString)
-//  println("V=" + V.toString)
+  println("configVersionsLookup.get(\"bkshDomainBus\")" + configVersionsLookup.key.get("bkshDomainBus"))
+
+  // How can I obtain the Lookup instances from the plug-in?!?!?!
 
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := Organization,
-    //version      := V.bkshDomainBus,
-    //scalaVersion := V.scalaVersion,
-    crossPaths   := false 
+    //version      := configVersionsLookup.key.get("bkshDomainBus"), // does not compile; I would prefer to write V.bkshDomainBus
+    //scalaVersion := configVersionsLookup.key.get("scalaVersion"),  // does not compile; I would prefer to write V.scalaVersion
+    crossPaths   := false
   )
 
   lazy val defaultSettings = buildSettings ++ Seq(
@@ -59,6 +54,6 @@ object Playpen extends Build {
   lazy val DomainBus = Project(
     id = "playpen",
     base = file("."),
-    settings = defaultSettings //++ /*dependencyReportSettings ++*/ /*SbtDependencies ++*/ Seq(libraryDependencies)
+    settings = defaultSettings ++ SbtDependencies.settings //++ /*dependencyReportSettings ++*/ /*SbtDependencies ++*/ Seq(libraryDependencies)
   )
 }
