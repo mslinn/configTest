@@ -30,7 +30,7 @@ object Playpen extends Build {
     organization := Organization,
     //version      := V.bkshDomainBus,
     //scalaVersion := V.scalaVersion,
-    crossPaths   := false
+    crossPaths   := false 
   )
 
   lazy val defaultSettings = buildSettings ++ Seq(
