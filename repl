@@ -1,0 +1,15 @@
+import akka.actor._
+import akka.dispatch._
+import akka.util.Duration
+import akka.util.duration._
+import com.typesafe.config._
+import collection.JavaConversions._
+import java.net.URL
+import java.util.ArrayList
+import scala.MatchError
+
+akka.remote.netty.port = 0
+"""
+println("""
+val systemSub = ActorSystem("subscriber")
+""")
