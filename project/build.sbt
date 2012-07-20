@@ -1,1 +1,1 @@
-libraryDependencies += "com.typesafe" % "config" % "0.5.0"
+libraryDependencies += "com.bookish" % "config" % "0.3.1-SNAPSHOT" withSources()

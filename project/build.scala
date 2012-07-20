@@ -1,48 +1,38 @@
-import com.bookish.config._
-import com.bookish.config.SbtDependencies._
-
+import com.bookish.config.{SbtProjectConfig, V, creds, servers}
 import sbt._
 import Keys._
 
 object Playpen extends Build {
-  val Organization = "com.mslinn"
+  val Organization = "com.micronautics"
 
-  configUrl := "https://raw.github.com/Bookish/config/master/scalaBuild/Build.conf"
-  //configUrl := SbtDependencies.jarUrl
-  println(SbtDependencies.settings)
+  //SbtProjectConfig.fetchFromUrl     = "https://raw.github.com/Bookish/config/master/scalaBuild/Build.conf"
+  //SbtProjectConfig.outerSectionName = "bookishDeps"
+  SbtProjectConfig.fetchFromUrl     = "https://raw.github.com/Bookish/config/v3/src/main/resources/definitions.conf"
+  SbtProjectConfig.quiet            = true
 
-  lazy val buildSettings = Defaults.defaultSettings ++ SbtDependencies.settings ++ Seq(
-//    organization := V.Organization,
-//    version      := V.bkshDomainBus,
-//    scalaVersion := V.scala, // V.scala is set by the plug-in, if the config file defines it properly
+  lazy val buildSettings = Defaults.defaultSettings ++ Seq(
+    organization := "com.micronautics",
+    version      := V("bkshDomainBus"),
+    scalaVersion := V("scala"),
     crossPaths   := false
   )
 
   lazy val defaultSettings = buildSettings ++ Seq(
     parallelExecution in Test := false,
-    resolvers ++= Seq(
-      "Typesafe Snapshots"   at "http://repo.typesafe.com/typesafe/snapshots"
-    ),
-    scalacOptions in (Compile, console) += "-Yrepl-sync",
     scalacOptions ++= Seq("-encoding", "UTF-8", "-deprecation", "-unchecked"),
-    javacOptions  ++= Seq("-Xlint:deprecation", "-Xcheckinit"),
     logLevel in compile := Level.Warn,
-//    credentials += Credentials("Artifactory Realm", "ci-sb-1.obi.int", creds.userid, creds.password), // creds._ set by plug-in
-//    publishTo <<= (version) { version: String =>
-//      if (version.trim.endsWith("SNAPSHOT"))
-//        Some("bookish" at servers.artifactory + "libs-snapshot-local/") // servers._ set by plug-in
-//      else
-//        Some("bookish" at servers.artifactory + "libs-release-local/")
-//    },
-    initialCommands +=
-      """
-        |println("Type :load repl")
-      """.stripMargin
+    credentials += Credentials("Artifactory Realm", "ci-sb-1.obi.int", creds("userid"), creds("password")),
+    publishTo <<= (version) { version: String =>
+      if (version.trim.endsWith("SNAPSHOT"))
+        Some("art" at servers("artifactory") + "libs-snapshot-local/")
+      else
+        Some("art" at servers("artifactory") + "libs-release-local/")
+    }
   )
 
-  lazy val DomainBus = Project(
+  lazy val PlaypenProject = Project(
     id = "playpen",
     base = file("."),
-    settings = defaultSettings ++ SbtDependencies.settings
+    settings = defaultSettings
   )
 }

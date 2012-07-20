@@ -1,1 +1,1 @@
-For testing SBT plugins and other Scala doodles
+Demonstration of config utility

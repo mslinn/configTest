@@ -1,8 +1,0 @@
-import com.typesafe.config._
-import collection.JavaConversions._
-import java.net.URL
-com.bookish.config._
-import com.bookish.config.SbtDependencies
-import com.bookish.config.SbtDependencies._
-
-val config = ConfigFactory.parseURL(new URL("https://raw.github.com/Bookish/config/master/scalaBuild/Build.conf"))
