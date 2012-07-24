@@ -10,8 +10,9 @@ object Playpen extends Build {
   //SbtProjectConfig.outerSectionName = "bookishDeps"
   //SbtProjectConfig.fetchFromUrl     = "https://raw.github.com/Bookish/config/v3/src/main/resources/definitions.conf"
   SbtProjectConfig.fetchFromUrl     = "file:///home/mslinn/work/bookish/config/src/main/resources/definitions.conf"
-  SbtProjectConfig.quiet            = false
+  SbtProjectConfig.quiet            = true
 
+  /** First use V() settings defined in definitions.config so referencedRepos is set when defaultSettings is computed */
   lazy val buildSettings = Defaults.defaultSettings ++ Seq(
     organization := "com.micronautics",
     version      := V("bkshDomainBus"),
@@ -19,9 +20,11 @@ object Playpen extends Build {
     crossPaths   := false
   )
 
+  /** Computation of buildSettings and libraryDependencies must preface resolvers computation so that referencedRepos is set */
   lazy val defaultSettings = buildSettings ++ Seq(
+    libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % V("scalatest") % "test" withSources()),
     resolvers ++= referencedRepos.map { r =>
-      println("Adding resolver: " + r)
+      //println("Adding resolver: " + r)
       (r at repositories(r))
     }.toSeq,
     parallelExecution in Test := false,
