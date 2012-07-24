@@ -23,7 +23,7 @@ object Playpen extends Build {
   /** Computation of buildSettings and libraryDependencies must preface resolvers computation so that referencedRepos is set */
   lazy val defaultSettings = buildSettings ++ Seq(
     libraryDependencies ++= Seq("org.scalatest" %% "scalatest" % V("scalatest") % "test" withSources()),
-    resolvers ++= referencedRepos.map { r =>
+    resolvers ++= referencedRepos.map { (r: String) => // automatically compute resolvers
       //println("Adding resolver: " + r)
       (r at repositories(r))
     }.toSeq,
